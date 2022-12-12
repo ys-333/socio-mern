@@ -12,7 +12,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.16",
-    "@mui/material": "^5.10.16",
+    "@mui/material": "^5.10.17",
     "@reduxjs/toolkit": "^1.9.1",
     "dotenv": "^16.0.3",
     "formik": "^2.2.9",
@@ -20,7 +20,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.4.3",
+    "react-router-dom": "^6.4.5",
     "redux-persist": "^6.0.0",
     "yup": "^0.32.11"
   },
