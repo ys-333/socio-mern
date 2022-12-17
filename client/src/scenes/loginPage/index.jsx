@@ -1,6 +1,6 @@
-import Navbar from 'scenes/navbar/index'
+import { Box } from '@mui/system'
 
 const LoginPage = () => {
-  return <Navbar />
+  return <Box>login</Box>
 }
 export default LoginPage
