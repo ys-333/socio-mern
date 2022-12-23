@@ -6,11 +6,12 @@ import {
   useMediaQuery,
   Typography,
   useTheme,
+  CircularProgress,
 } from '@mui/material'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import { json, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setLogin } from '../../store/index'
 import Dropzone from 'react-dropzone'
@@ -45,6 +46,14 @@ const initialValuesLogin = {
 }
 
 const Form = () => {
+  const [error, setError] = useState({
+    emailInvalid: false,
+    emailMessage: '',
+    passwordInvalid: false,
+    passwordMessage: '',
+  })
+
+  const [loading, setLoading] = useState(false)
   const [pageType, setPageType] = useState('login')
   const { palette } = useTheme()
   const dispatch = useDispatch()
@@ -62,6 +71,29 @@ const Form = () => {
       body: JSON.stringify(values),
     })
     const loggedIn = await loggedInResponse.json()
+
+    if (loggedIn.status === 400) {
+      setError((prevState) => {
+        return {
+          ...prevState,
+          passwordInvalid: true,
+          passwordMessage: loggedIn.message,
+        }
+      })
+      return
+    }
+
+    if (loggedIn.status === 401) {
+      setError((prevState) => {
+        return {
+          ...prevState,
+          emailInvalid: true,
+          emailMessage: loggedIn.message,
+        }
+      })
+      return
+    }
+
     if (loggedIn) {
       dispatch(
         setLogin({
@@ -96,8 +128,10 @@ const Form = () => {
   }
 
   const handleFormSubmit = async (values, onSubmitProps) => {
+    setLoading(true)
     if (isLogin) await login(values, onSubmitProps)
     if (isRegister) await register(values, onSubmitProps)
+    setLoading(false)
   }
 
   return (
@@ -226,6 +260,17 @@ const Form = () => {
                 gridColumn: 'span 4',
               }}
             />
+            {error.emailInvalid && (
+              <Typography
+                variant="h6"
+                color="red"
+                sx={{
+                  gridColumn: 'span 4',
+                }}
+              >
+                {error.emailMessage}
+              </Typography>
+            )}
             <TextField
               type="password"
               label="Password"
@@ -239,6 +284,17 @@ const Form = () => {
                 gridColumn: 'span 4 ',
               }}
             />
+            {error.passwordInvalid && (
+              <Typography
+                variant="h6"
+                color="red"
+                sx={{
+                  gridColumn: 'span 4',
+                }}
+              >
+                {error.passwordMessage}
+              </Typography>
+            )}
           </Box>
 
           {/*   BUTTONS */}
@@ -250,11 +306,29 @@ const Form = () => {
                 m: '2rem 0',
                 p: '1rem',
                 backgroundColor: palette.primary.main,
+
                 color: palette.background.alt,
                 '&:hover': { color: palette.primary.main },
               }}
             >
-              {isLogin ? 'LOGIN' : 'REGISTER'}
+              {isLogin ? (
+                loading ? (
+                  <CircularProgress
+                    sx={{
+                      color:
+                        palette.mode === 'dark'
+                          ? palette.background.default
+                          : palette.neutral.light,
+                    }}
+                  />
+                ) : (
+                  'LOGIN'
+                )
+              ) : loading ? (
+                <CircularProgress />
+              ) : (
+                'REGISTER'
+              )}
             </Button>
             <Typography
               onClick={() => {
