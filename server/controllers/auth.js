@@ -26,6 +26,8 @@ export const register = async (req, res) => {
       occupation,
       viewedProfile: Math.floor(Math.random() * 1000),
       impressions: Math.floor(Math.random() * 1000),
+      twitter: 'https://twitter.com/home',
+      linkedin: 'https://www.linkedin.com/',
     })
 
     const savedUser = await newUser.save()
@@ -44,6 +46,8 @@ export const register = async (req, res) => {
         impressions: savedUser.impressions,
         createdAt: savedUser.createdAt,
         updatedAt: savedUser.updatedAt,
+        twitter: savedUser.twitter,
+        linkedin: savedUser.linkedin,
       },
     })
   } catch (err) {
@@ -88,6 +92,8 @@ export const login = async (req, res) => {
         impressions: user.impressions,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        twitter: user.twitter,
+        linkedin: user.linkedin,
       },
     })
   } catch (err) {

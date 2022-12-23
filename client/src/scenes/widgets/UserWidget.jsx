@@ -4,16 +4,21 @@ import {
   EditOutlined,
   LocationOnOutlined,
   WorkOutlineOutlined,
-  SaveAltOutlined,
+  SaveAsOutlined,
 } from '@mui/icons-material'
-import { Box, Typography, Divider, useTheme } from '@mui/material'
+import { Box, Typography, Divider, useTheme, IconButton } from '@mui/material'
 import UserImage from '../../components/UserImage'
 import FlexBetween from '../../components/FlexBetween'
 import WidgetWrapper from '../../components/WidgetWrapper'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import SocialProfileForm from './SocialProfileForm'
 
 const UserWidget = ({ userId, picturePath }) => {
+  const [toggleSocialForm, setToggleSocialForm] = useState({
+    twitter: false,
+    linkedin: false,
+  })
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
   const token = useSelector((state) => state.token)
@@ -21,6 +26,24 @@ const UserWidget = ({ userId, picturePath }) => {
   const dark = palette.neutral.dark
   const medium = palette.neutral.medium
   const main = palette.neutral.main
+
+  // twitter form handler to save url
+
+  const saveTwitterHandler = () => {
+    setToggleSocialForm((prevState) => {
+      return { ...prevState, twitter: false }
+    })
+  }
+
+  // after submitting the form and on clicking edit button
+
+  const toggleLinkedinHandler = () => {
+    setToggleSocialForm((prevState) => {
+      return { ...prevState, linkedin: false }
+    })
+  }
+
+  const saveLinkedinHandler = (event) => {}
 
   const getUser = async () => {
     const response = await fetch(`http://localhost:5000/user/${userId}`, {
@@ -122,25 +145,68 @@ const UserWidget = ({ userId, picturePath }) => {
           <FlexBetween gap="1rem">
             <img src="../assets/twitter.png" alt="twitter" />
             <Box>
-              <Typography color={main} fontWeight="500">
-                Twitter <SaveAltOutlined />
-              </Typography>
-              <Typography color={medium}>Social Network</Typography>
+              {toggleSocialForm.twitter ? (
+                <SocialProfileForm
+                  handler={saveTwitterHandler}
+                  label="twitter"
+                  placeholder="twitter"
+                  setState={setToggleSocialForm}
+                />
+              ) : (
+                <>
+                  <Typography color={main} fontWeight="500">
+                    Twitter
+                  </Typography>
+                  <Typography color={medium}>Social Network</Typography>
+                </>
+              )}
             </Box>
           </FlexBetween>
-          <EditOutlined sx={{ color: main }} />
+          {toggleSocialForm.twitter === false && (
+            <IconButton
+              onClick={() =>
+                setToggleSocialForm((prevState) => {
+                  return { ...prevState, twitter: true }
+                })
+              }
+            >
+              <EditOutlined sx={{ color: main }} />
+            </IconButton>
+          )}
         </FlexBetween>
         <FlexBetween gap="1rem">
           <FlexBetween gap="1rem">
             <img src="../assets/linkedin.png" alt="twitter" />
             <Box>
-              <Typography color={main} fontWeight="500">
-                Linkedin
-              </Typography>
-              <Typography color={medium}>Networking Platform</Typography>
+              {toggleSocialForm.linkedin ? (
+                <SocialProfileForm
+                  handler={toggleLinkedinHandler}
+                  label="linkedin"
+                  placeholder="linkedin"
+                  setState={setToggleSocialForm}
+                />
+              ) : (
+                <>
+                  {' '}
+                  <Typography color={main} fontWeight="500">
+                    Linkedin
+                  </Typography>
+                  <Typography color={medium}>Networking Site</Typography>
+                </>
+              )}
             </Box>
           </FlexBetween>
-          <EditOutlined sx={{ color: main }} />
+          {toggleSocialForm.linkedin === false && (
+            <IconButton
+              onClick={() =>
+                setToggleSocialForm((prevState) => {
+                  return { ...prevState, linkedin: true }
+                })
+              }
+            >
+              <EditOutlined sx={{ color: main }} />
+            </IconButton>
+          )}
         </FlexBetween>
       </Box>
     </WidgetWrapper>

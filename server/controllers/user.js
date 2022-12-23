@@ -60,3 +60,46 @@ export const addRemoveFriend = async (req, res) => {
     res.status(404).json({ err: err.message })
   }
 }
+
+/*ADD SOCIAL HANDLE*/
+
+export const addSocialHandle = async (req, res) => {
+  try {
+    const { userId } = req.params
+    const { link } = req.body
+    const social = req.header('social') //to know which social media it is
+
+    console.log(userId, link, social)
+
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(400).json({ status: 400, message: 'User do not exist' })
+    }
+    if (social === 'twitter') {
+      user.twitter = link
+    } else {
+      user.linkedin = link
+    }
+    await user.save()
+    return res.status(200).json({
+      user: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        picturePath: user.picturePath,
+        friends: user.friends,
+        location: user.location,
+        occupation: user.occupation,
+        viewedProfile: user.viewedProfile,
+        impressions: user.impressions,
+        twitter: user.twitter,
+        linkedin: user.linkedin,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    })
+  } catch (err) {
+    return res.status(404).json({ message: err.message })
+  }
+}

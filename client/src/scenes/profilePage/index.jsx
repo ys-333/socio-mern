@@ -1,12 +1,12 @@
-import { useLocation, useParams } from 'react-router-dom'
+import { Box, Typography } from '@mui/material'
+import SocialProfileForm from '../widgets/SocialProfileForm'
 
 const ProfilePage = () => {
-  const params = useParams()
-  const location = useLocation()
-
-  console.log(location)
-  console.log(params.friends)
-
-  return <h1>Profile Page</h1>
+  return (
+    <Box>
+      <Typography variant="h1">Profile Page</Typography>
+      <SocialProfileForm />
+    </Box>
+  )
 }
 export default ProfilePage
