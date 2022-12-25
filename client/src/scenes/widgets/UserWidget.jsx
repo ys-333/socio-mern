@@ -4,7 +4,7 @@ import {
   EditOutlined,
   LocationOnOutlined,
   WorkOutlineOutlined,
-  SaveAsOutlined,
+  IosShareOutlined,
 } from '@mui/icons-material'
 import { Box, Typography, Divider, useTheme, IconButton } from '@mui/material'
 import UserImage from '../../components/UserImage'
@@ -28,6 +28,8 @@ const UserWidget = ({ userId, picturePath }) => {
   const main = palette.neutral.main
 
   // twitter form handler to save url
+
+  // console.log(user.twitter, user.linkedin)
 
   const saveTwitterHandler = () => {
     setToggleSocialForm((prevState) => {
@@ -155,7 +157,9 @@ const UserWidget = ({ userId, picturePath }) => {
               ) : (
                 <>
                   <Typography color={main} fontWeight="500">
-                    Twitter
+                    <a target="_blank" href={user.twitter ? user.twitter : '#'}>
+                      Twitter <IosShareOutlined />
+                    </a>
                   </Typography>
                   <Typography color={medium}>Social Network</Typography>
                 </>
@@ -189,7 +193,12 @@ const UserWidget = ({ userId, picturePath }) => {
                 <>
                   {' '}
                   <Typography color={main} fontWeight="500">
-                    Linkedin
+                    <a
+                      target="_blank"
+                      href={user.linkedin ? user.linkedin : '#'}
+                    >
+                      Linkedin <IosShareOutlined />
+                    </a>
                   </Typography>
                   <Typography color={medium}>Networking Site</Typography>
                 </>

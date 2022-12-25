@@ -67,11 +67,16 @@ export const addSocialHandle = async (req, res) => {
   try {
     const { userId } = req.params
     const { link } = req.body
+
+    if (link.length === 0) {
+      return res.status(400).json({ message: 'Please add socail handle' })
+    }
     const social = req.header('social') //to know which social media it is
 
-    console.log(userId, link, social)
-
     const user = await User.findById(userId)
+
+    console.log(user, req.body, social)
+
     if (!user) {
       return res.status(400).json({ status: 400, message: 'User do not exist' })
     }
@@ -95,11 +100,9 @@ export const addSocialHandle = async (req, res) => {
         impressions: user.impressions,
         twitter: user.twitter,
         linkedin: user.linkedin,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
       },
     })
   } catch (err) {
-    return res.status(404).json({ message: err.message })
+    return res.status(400).json({ message: err.message })
   }
 }
