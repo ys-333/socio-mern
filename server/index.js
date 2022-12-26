@@ -51,7 +51,7 @@ const upload = multer({ storage })
 // ! WE add register here as we have configured multer in index.js file
 
 app.post('/auth/register', upload.single('picture'), register)
-app.post('/post', verifyToken, upload.single('picture', createPost))
+app.post('/posts', verifyToken, upload.single('picture'), createPost)
 
 /*ROUTES*/
 app.use('/auth', authRoutes)
