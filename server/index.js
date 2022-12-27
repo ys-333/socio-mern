@@ -56,7 +56,7 @@ app.post('/posts', verifyToken, upload.single('picture'), createPost)
 /*ROUTES*/
 app.use('/auth', authRoutes)
 app.use('/user', userRoutes)
-app.use('/post', postRoutes)
+app.use('/posts', postRoutes)
 
 /*DATABASE CONNECTON AND SERVER CONNECTON*/
 dbConnect()
