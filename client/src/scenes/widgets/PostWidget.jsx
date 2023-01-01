@@ -34,5 +34,6 @@ const PostWidget = ({
   const primaryDark = palette.primary.dark
   const main = palette.neutral.main
   const medium = palette.neutral.medium
+  return <h1>post widget</h1>
 }
 export default PostWidget
