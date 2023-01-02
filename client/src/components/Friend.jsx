@@ -9,7 +9,8 @@ import { useNavigate } from 'react-router-dom'
 const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { _id, friends } = useSelector((state) => state.user)
+  const { _id } = useSelector((state) => state.user)
+  const { friends } = useSelector((state) => state.user)
   const token = useSelector((state) => state.token)
 
   const { palette } = useTheme()
@@ -63,7 +64,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         </Box>
       </FlexBetween>
       <IconButton
-        onClick={() => patchFriend()}
+        onClick={patchFriend}
         sx={{
           backgroundColor: primaryLight,
           p: '0.6rem',

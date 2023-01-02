@@ -28,6 +28,7 @@ export const register = async (req, res) => {
       impressions: Math.floor(Math.random() * 1000),
       twitter: '',
       linkedin: '',
+      friends: [],
     })
 
     const savedUser = await newUser.save()
