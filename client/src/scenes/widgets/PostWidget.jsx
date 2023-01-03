@@ -34,14 +34,16 @@ const PostWidget = ({
   const main = palette.neutral.main
   const primary = palette.primary.main
 
-  console.log(isLiked, likes)
+  console.log(isLiked)
 
   const patchLike = async () => {
+    console.log('like or unlike')
     const response = await fetch(`http://localhost:5000/posts/${postId}/like`, {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
+        AccessControlAllowPrivateNetwork: true,
       },
       body: JSON.stringify({ userId: loggedInUserId }),
     })
@@ -74,9 +76,9 @@ const PostWidget = ({
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchLike}>
               {isLiked ? (
-                <FavoriteBorderOutlined sx={{ color: primary }} />
-              ) : (
                 <FavoriteOutlined sx={{ color: primary }} />
+              ) : (
+                <FavoriteBorderOutlined />
               )}
             </IconButton>
             <Typography>{likeCounts}</Typography>

@@ -35,6 +35,7 @@ export const createPost = async (req, res) => {
 
 export const getFeedPosts = async (req, res) => {
   try {
+    console.log('fetching all posts')
     const post = Post.find()
     res.status(200).json(post)
   } catch (err) {
@@ -56,9 +57,9 @@ export const getUserPosts = async (req, res) => {
 
 export const likePost = async (req, res) => {
   try {
-    console.log('likepostp')
     const { id } = req.params
     const { userId } = req.body
+    console.log('like post or remove post')
     const post = await Post.findById(id)
     const isLiked = post.likes.get(userId)
 
