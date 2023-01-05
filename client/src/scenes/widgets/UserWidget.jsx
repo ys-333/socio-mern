@@ -5,8 +5,16 @@ import {
   LocationOnOutlined,
   WorkOutlineOutlined,
   IosShareOutlined,
+  Block,
 } from '@mui/icons-material'
-import { Box, Typography, Divider, useTheme, IconButton } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Divider,
+  useTheme,
+  IconButton,
+  useMediaQuery,
+} from '@mui/material'
 import UserImage from '../../components/UserImage'
 import FlexBetween from '../../components/FlexBetween'
 import WidgetWrapper from '../../components/WidgetWrapper'
@@ -26,6 +34,7 @@ const UserWidget = ({ userId, picturePath }) => {
   const dark = palette.neutral.dark
   const medium = palette.neutral.medium
   const main = palette.neutral.main
+  const isNonMobileScreens = useMediaQuery('(min-width:1000px)')
 
   // twitter form handler to save url
 
@@ -76,7 +85,7 @@ const UserWidget = ({ userId, picturePath }) => {
   } = user
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper position={isNonMobileScreens ? 'fixed' : 'block'}>
       {/* FIRST ROW */}
       <FlexBetween
         gap="0.5rem"

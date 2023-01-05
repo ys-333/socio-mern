@@ -34,10 +34,7 @@ const PostWidget = ({
   const main = palette.neutral.main
   const primary = palette.primary.main
 
-  console.log(isLiked)
-
   const patchLike = async () => {
-    console.log('like or unlike')
     const response = await fetch(`http://localhost:5000/posts/${postId}/like`, {
       method: 'PATCH',
       headers: {
