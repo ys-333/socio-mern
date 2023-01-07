@@ -18,6 +18,7 @@ import { verifyToken } from './middleware/auth.js'
 import User from './models/User.js'
 import Post from './models/Post.js'
 import { users, posts } from './data/index.js'
+import { getFeedPosts } from './controllers/post.js'
 
 /* CONFIGURATIONS*/
 
@@ -52,6 +53,38 @@ const upload = multer({ storage })
 
 app.post('/auth/register', upload.single('picture'), register)
 app.post('/posts', verifyToken, upload.single('picture'), createPost)
+
+// routes to get all post
+// written here insted of controllers/routes folder, as to deal with preflight request
+app.get('/posts', verifyToken, async (req, res) => {
+  const posts = await Post.find()
+  console.log(posts)
+  res.status(200).json(posts)
+})
+
+// to like post, same issue as we face in above routes
+
+app.patch('/posts/:id/like', verifyToken, async (req, res) => {
+  const { id } = req.params
+  const { userId } = req.body
+  console.log('like post or remove post')
+  const post = await Post.findById(id)
+  const isLiked = post.likes.get(userId)
+
+  if (isLiked) {
+    post.likes.delete(userId)
+  } else {
+    post.likes.set(userId, true)
+  }
+
+  const updatedPost = await Post.findByIdAndUpdate(
+    id,
+    { likes: post.likes },
+    { new: true },
+  )
+
+  res.status(200).json(updatedPost)
+})
 
 /*ROUTES*/
 app.use('/auth', authRoutes)

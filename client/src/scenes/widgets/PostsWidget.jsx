@@ -8,15 +8,19 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const posts = useSelector((state) => state.posts)
   const token = useSelector((state) => state.token)
 
-  const getPosts = async () => {
+  const getPosts = useCallback(async () => {
     console.log('inside the getposts function')
-    const response = await fetch('http://localhost:5000/posts', {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    const response = await fetch(
+      'http://localhost:5000/posts',
+      {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      },
+      [],
+    )
     const data = await response.json()
     dispatch(setPosts({ posts: data }))
-  }
+  })
 
   const getUserPosts = useCallback(async () => {
     const response = await fetch(
@@ -32,13 +36,14 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   }, [])
 
   useEffect(() => {
-    console.log('first time page redering')
     if (isProfile) {
       getUserPosts()
     } else {
       getPosts()
     }
-  }, [getPosts, getUserPosts]) //eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
+
+  console.log(posts)
 
   return (
     <>

@@ -31,7 +31,7 @@ const FriendListWidget = () => {
   return (
     <Box>
       {friends.map((friend) => (
-        <Box m="1rem 0">
+        <Box m="1rem 0" key={friend._id}>
           <Friend
             key={friend._id}
             friendId={friend._id}
