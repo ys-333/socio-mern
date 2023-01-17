@@ -3,14 +3,58 @@ import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
   ShareOutlined,
+  MoreHorizOutlined,
+  CloseOutlined,
 } from '@mui/icons-material'
-import { Box, Divider, IconButton, Typography, useTheme } from '@mui/material'
+import {
+  Box,
+  Divider,
+  IconButton,
+  Typography,
+  useTheme,
+  Modal,
+  Button,
+} from '@mui/material'
 import FlexBetween from '../../components/FlexBetween'
 import Friend from '../../components/Friend'
 import WidgetWrapper from '../../components/WidgetWrapper'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setPost } from '../../store/index'
+
+const ModalOverlay = (props) => {
+  const handleClose = () => {
+    props.onClose()
+  }
+
+  const deleteHandler = () => {
+    // todo some logic to delete the post
+  }
+
+  return (
+    <Modal open={props.open} onClose={handleClose}>
+      <FlexBetween
+        style={{
+          width: '25%',
+          margin: '18rem auto',
+          background: 'rgb(0,0,0)',
+          padding: '2rem',
+          borderRadius: '0.75',
+        }}
+      >
+        <IconButton onClick={handleClose}>
+          <FlexBetween>
+            <Typography>Cancel</Typography>
+            <CloseOutlined />
+          </FlexBetween>
+        </IconButton>
+        <Button variant="outlined" color="error" onClick={deleteHandler}>
+          Delete
+        </Button>
+      </FlexBetween>
+    </Modal>
+  )
+}
 
 const PostWidget = ({
   postId,
@@ -23,6 +67,7 @@ const PostWidget = ({
   likes,
   comments,
 }) => {
+  const [open, setOpen] = useState(false)
   const [isComment, setIsComments] = useState(false)
   const dispatch = useDispatch()
   const token = useSelector((state) => state.token)
@@ -33,6 +78,10 @@ const PostWidget = ({
   const { palette } = useTheme()
   const main = palette.neutral.main
   const primary = palette.primary.main
+
+  const openHandler = () => {
+    setOpen((prev) => !prev)
+  }
 
   const patchLike = async () => {
     const response = await fetch(`http://localhost:5000/posts/${postId}/like`, {
@@ -87,9 +136,14 @@ const PostWidget = ({
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
-        <IconButton>
-          <ShareOutlined />
-        </IconButton>
+        <FlexBetween>
+          <IconButton>
+            <ShareOutlined />
+          </IconButton>
+          <IconButton sx={{ ml: '.8rem' }} onClick={openHandler}>
+            <MoreHorizOutlined />
+          </IconButton>
+        </FlexBetween>
       </FlexBetween>
       {isComment && (
         <Box mt="0.5rem">
@@ -104,6 +158,7 @@ const PostWidget = ({
           <Divider />
         </Box>
       )}
+      <ModalOverlay open={open} onClose={openHandler} />
     </WidgetWrapper>
   )
 }
