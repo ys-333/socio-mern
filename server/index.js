@@ -19,6 +19,7 @@ import User from './models/User.js'
 import Post from './models/Post.js'
 import { users, posts } from './data/index.js'
 import { getFeedPosts } from './controllers/post.js'
+import obj from './config/cloudinary.js'
 
 /* CONFIGURATIONS*/
 
@@ -29,7 +30,7 @@ const app = express()
 app.use(express.json())
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
-app.use(morgan('common'))
+// app.use(morgan('common'))
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use(cors())
@@ -48,11 +49,50 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
+// const upload = multer({ storage: obj.storage })
+
 /*ROUTES WITH FILES */
 // ! WE add register here as we have configured multer in index.js file
 
 app.post('/auth/register', upload.single('picture'), register)
 app.post('/posts', verifyToken, upload.single('picture'), createPost)
+// app.post('/posts', verifyToken, upload.single('picture'), async (req, res) => {
+//   try {
+//     const { userId, description } = req.body
+//     const user = await User.findById(userId)
+//     const firstName = user.firstName
+//     const lastName = user.lastName
+//     const location = user.location
+//     const userPicturePath = user.picturePath
+
+//     // Upload the file to Cloudinary
+//     // const uploadResult = await cloudinary.v2.uploader.upload(req.file.path)
+//     const uploadResult = await obj.cloudinary.v2.uploader.upload(req.file.path)
+//     // Get the URL of the uploaded image
+//     const picturePath = uploadResult.secure_url
+
+//     console.log(picturePath, 'lsjfasjf dsjf ')
+
+//     const newPost = new Post({
+//       userId,
+//       firstName,
+//       lastName,
+//       location,
+//       userPicturePath,
+//       description,
+//       picturePath,
+//       likes: {},
+//       comments: [],
+//     })
+
+//     // await newPost.save()
+
+//     const post = await Post.find()
+//     res.status(201).json(post)
+//   } catch (err) {
+//     res.status(409).json({ err: err.message })
+//   }
+// })
 
 // routes to get all post
 // written here insted of controllers/routes folder, as to deal with preflight request

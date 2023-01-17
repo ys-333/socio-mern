@@ -4,8 +4,8 @@ dotenv.config()
 
 export const verifyToken = async (req, res, next) => {
   try {
+    console.log('authentication middleware')
     let token = req.header('Authorization')
-    console.log(req.header('Authorization'))
     if (!token) {
       return res.status(403).send('Access Denied')
     }

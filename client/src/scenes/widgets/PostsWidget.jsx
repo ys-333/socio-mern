@@ -43,7 +43,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   }, [])
 
-  console.log(posts)
+
 
   return (
     <>
