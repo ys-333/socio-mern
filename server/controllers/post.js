@@ -1,6 +1,8 @@
 import Post from '../models/Post'
 import User from '../models/User'
 
+import fs from 'fs'
+
 export const createPost = async (req, res) => {
   try {
     const { userId, description, picturePath } = req.body
@@ -80,5 +82,34 @@ export const likePost = async (req, res) => {
     res.status(200).json(updatedPost)
   } catch (err) {
     res.status(404).json({ message: err.message })
+  }
+}
+
+/*DELETE*/
+
+export const deletePost = async (req, res) => {
+  try {
+    const { postId } = req.body
+    const post = await Post.findById(postId)
+
+    const { picturePath } = post
+
+    if (picturePath) {
+      fs.unlink(picturePath, (err) => {
+        if (err) {
+          return res.status(500).json({ message: err.message })
+        } else {
+          console.log('Deleted sucessfully')
+        }
+      })
+    }
+
+    await Post.findByIdAndDelete(postId)
+
+    const Posts = await Post.find()
+
+    return rmSync.status(200).json({ post })
+  } catch (err) {
+    return res.status(404).json({ message: err.message })
   }
 }

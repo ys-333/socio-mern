@@ -1,6 +1,11 @@
 import express, { Router } from 'express'
 import { verifyToken } from '../middleware/auth'
-import { getFeedPosts, getUserPosts, likePost } from '../controllers/post.js'
+import {
+  getFeedPosts,
+  getUserPosts,
+  likePost,
+  deletePost,
+} from '../controllers/post.js'
 
 const router = express.Router()
 
@@ -10,5 +15,9 @@ const router = express.Router()
 router.get('/:userId/posts', verifyToken, getUserPosts)
 /*UPDATE*/
 // router.patch('/:id/like', verifyToken, likePost)
+
+/*DELETE*/
+
+// router.delete('/delete', verifyToken, deletePost)
 
 export default Router

@@ -20,6 +20,7 @@ import Post from './models/Post.js'
 import { users, posts } from './data/index.js'
 import { getFeedPosts } from './controllers/post.js'
 import obj from './config/cloudinary.js'
+import fs from 'fs'
 
 /* CONFIGURATIONS*/
 
@@ -98,7 +99,7 @@ app.post('/posts', verifyToken, upload.single('picture'), createPost)
 // written here insted of controllers/routes folder, as to deal with preflight request
 app.get('/posts', verifyToken, async (req, res) => {
   const posts = await Post.find()
-  console.log(posts)
+
   res.status(200).json(posts)
 })
 
@@ -124,6 +125,36 @@ app.patch('/posts/:id/like', verifyToken, async (req, res) => {
   )
 
   res.status(200).json(updatedPost)
+})
+
+app.delete('/posts/delete', verifyToken, async (req, res) => {
+  try {
+    const { postId } = req.body
+    const post = await Post.findById(postId)
+
+    const { picturePath } = post
+
+    console.log(picturePath)
+
+    if (picturePath) {
+      const filePath = `public/assets/${picturePath}`
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          return res.status(500).json({ message: err.message })
+        } else {
+          console.log('Deleted sucessfully')
+        }
+      })
+    }
+
+    await Post.findByIdAndDelete(postId)
+
+    const posts = await Post.find()
+
+    return res.status(200).json({ posts })
+  } catch (err) {
+    return res.status(404).json({ message: err.message })
+  }
 })
 
 /*ROUTES*/
