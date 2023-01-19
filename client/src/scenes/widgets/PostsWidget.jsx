@@ -32,6 +32,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       },
     )
     const data = await response.json()
+
+    return
+
     dispatch(setPosts({ posts: data }))
   }, [])
 
@@ -42,8 +45,6 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       getPosts()
     }
   }, [])
-
-
 
   return (
     <>

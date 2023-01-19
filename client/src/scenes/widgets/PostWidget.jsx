@@ -20,19 +20,39 @@ import Friend from '../../components/Friend'
 import WidgetWrapper from '../../components/WidgetWrapper'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setPost } from '../../store/index'
+import { setPost, setPosts } from '../../store/index'
 
-const ModalOverlay = (props) => {
+const ModalOverlay = ({ postId, open, onClose }) => {
+  const token = useSelector((state) => state.token)
+
+  console.log(token)
+
+  const dispatch = useDispatch()
+
   const handleClose = () => {
-    props.onClose()
+    onClose()
   }
 
-  const deleteHandler = () => {
+  const deleteHandler = async () => {
     // todo some logic to delete the post
+    const response = await fetch('http://localhost:5000/posts/delete', {
+      method: 'DELETE',
+      body: JSON.stringify({ postId: postId }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    const data = await response.json()
+
+    console.log(data.posts, data.message)
+
+    dispatch(setPosts({ posts: data.posts }))
   }
 
   return (
-    <Modal open={props.open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose}>
       <FlexBetween
         style={{
           width: '25%',
@@ -158,7 +178,7 @@ const PostWidget = ({
           <Divider />
         </Box>
       )}
-      <ModalOverlay open={open} onClose={openHandler} />
+      <ModalOverlay open={open} onClose={openHandler} postId={postId} />
     </WidgetWrapper>
   )
 }
